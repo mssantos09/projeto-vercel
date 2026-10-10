@@ -1,0 +1,378 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Custom Scrollbar for sleek Netflix look */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #141414;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #333333;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #e50914;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .hero-gradient {
+        background: linear-gradient(180deg, rgba(20, 20, 20, 0.2) 0%, rgba(20, 20, 20, 0.8) 70%, rgba(20, 20, 20, 1) 100%),
+            linear-gradient(90deg, rgba(20, 20, 20, 0.9) 0%, rgba(20, 20, 20, 0.5) 40%, rgba(20, 20, 20, 0) 100%);
+    }
+
+    .card-hover-effect {
+        transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+    }
+
+    .card-hover-effect:hover {
+        transform: scale(1.08) translateY(-6px);
+        z-index: 30;
+        box-shadow: 0 10px 25px -5px rgba(229, 9, 20, 0.4);
+    }
+
+    .code-font {
+        font-family: 'Fira Code', monospace;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.25s ease-out forwards;
+    }
+</style>
+</head>
+
+<body class="bg-[#141414] text-white min-h-screen flex flex-col selection:bg-[#e50914] selection:text-white">
+
+    <!-- Mode Switcher Navigation Header (Live App vs Code Viewers) -->
+    <header id="app-header"
+        class="sticky top-0 z-50 bg-[#0f0f0f]/95 backdrop-blur-md border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="text-[#e50914] font-black text-2xl tracking-tighter flex items-center gap-1 cursor-pointer"
+                onclick="switchToTab('preview')">
+                <i class="fa-solid fa-play-circle text-3xl"></i>
+                <span class="tracking-widest">STREAMFLIX</span>
+            </div>
+            <span
+                class="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded border border-zinc-700 hidden sm:inline-block">v2.4
+                Pro</span>
+        </div>
+
+        <!-- Code Separation Tabs -->
+        <div class="flex items-center bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs sm:text-sm font-medium">
+            <button onclick="switchToTab('preview')" id="tab-btn-preview"
+                class="tab-btn px-3 py-1.5 rounded-md transition flex items-center gap-2 bg-[#e50914] text-white shadow">
+                <i class="fa-solid fa-desktop"></i>
+                <span>Live Stream</span>
+            </button>
+            <button onclick="switchToTab('html')" id="tab-btn-html"
+                class="tab-btn px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition flex items-center gap-2">
+                <i class="fa-brands fa-html5 text-orange-500"></i>
+                <span>HTML</span>
+            </button>
+            <button onclick="switchToTab('css')" id="tab-btn-css"
+                class="tab-btn px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition flex items-center gap-2">
+                <i class="fa-brands fa-css3-alt text-blue-500"></i>
+                <span>CSS</span>
+            </button>
+            <button onclick="switchToTab('js')" id="tab-btn-js"
+                class="tab-btn px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition flex items-center gap-2">
+                <i class="fa-brands fa-js text-yellow-400"></i>
+                <span>JS</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col relative">
+
+        <!-- TAB 1: LIVE INTERACTIVE STREAMFLIX HOMEPAGE PREVIEW -->
+        <div id="view-preview" class="tab-view flex-grow flex flex-col">
+
+            <!-- Navbar -->
+            <nav id="navbar"
+                class="fixed top-14 left-0 right-0 z-40 transition-all duration-500 px-4 sm:px-12 py-4 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent">
+                <div class="flex items-center space-x-8">
+                    <div class="text-[#e50914] font-black text-2xl tracking-wider cursor-pointer">STREAMFLIX</div>
+                    <ul class="hidden md:flex space-x-6 text-sm font-medium text-zinc-300">
+                        <li><a href="#" class="text-white hover:text-zinc-300 transition">Home</a></li>
+                        <li><a href="#" class="hover:text-zinc-400 transition">TV Shows</a></li>
+                        <li><a href="#" class="hover:text-zinc-400 transition">Movies</a></li>
+                        <li><a href="#" class="hover:text-zinc-400 transition">New & Popular</a></li>
+                        <li><a href="#" class="hover:text-zinc-400 transition">My List</a></li>
+                    </ul>
+                </div>
+                <div class="flex items-center space-x-5 text-zinc-200">
+                    <button class="hover:text-white transition"><i
+                            class="fa-solid fa-magnifying-glass text-lg"></i></button>
+                    <button class="hover:text-white transition hidden sm:block"><i
+                            class="fa-regular fa-bell text-lg"></i></button>
+                    <div class="flex items-center space-x-2 cursor-pointer group">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80"
+                            alt="Profile"
+                            class="w-8 h-8 rounded border border-zinc-700 group-hover:border-red-600 transition">
+                        <i class="fa-solid fa-caret-down text-xs text-zinc-400 group-hover:text-white transition"></i>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Hero Featured Banner Section -->
+            <section id="hero-banner"
+                class="relative w-full h-[75vh] sm:h-[85vh] bg-cover bg-center flex items-end pb-16 px-6 sm:px-12 transition-all duration-700">
+                <div class="absolute inset-0 hero-gradient"></div>
+
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <div
+                        class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-red-600/30 border border-red-500/50 text-red-400 text-xs font-semibold uppercase tracking-widest backdrop-blur-md">
+                        <i class="fa-solid fa-fire"></i> #1 Movie Today
+                    </div>
+                    <h1 id="hero-title" class="text-4xl sm:text-6xl font-black tracking-tight drop-shadow-md">Cyberpunk
+                        2099</h1>
+                    <p id="hero-[#description]"
+                        class="text-zinc-300 text-sm sm:text-base line-clamp-3 leading-relaxed drop-shadow">
+                        In a dystopian metropolis ruled by tech corporations, a rogue hacker discovers a conspiracy that
+                        could rewrite human consciousness forever.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <button id="hero-play-btn"
+                            onclick="playTrailer('Cyberpunk 2099', 'https://www.youtube.com/embed/dQw4w9WgXcQ')"
+                            class="bg-white hover:bg-zinc-200 text-black font-bold px-6 py-3 rounded-md flex items-center gap-3 transition transform active:scale-95 shadow-lg">
+                            <i class="fa-solid fa-play text-xl"></i>
+                            <span>Play Now</span>
+                        </button>
+                        <button id="hero-info-btn"
+                            class="bg-zinc-600/70 hover:bg-zinc-600 text-white font-semibold px-6 py-3 rounded-md flex items-center gap-3 transition backdrop-blur-md transform active:scale-95">
+                            <i class="fa-solid fa-circle-info text-xl"></i>
+                            <span>More Info</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Movie Categories Section -->
+            <div class="px-4 sm:px-12 -mt-16 sm:-mt-24 relative z-20 space-y-10 pb-16">
+
+                <!-- Category 1: Trending Now -->
+                <section class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold tracking-wide text-zinc-100 flex items-center gap-2">
+                            <span>Trending Now</span>
+                            <i
+                                class="fa-solid fa-chevron-right text-xs text-zinc-500 hover:text-white transition cursor-pointer"></i>
+                        </h2>
+                    </div>
+                    <div class="relative group">
+                        <button onclick="scrollRow('trending-row', -1)"
+                            class="absolute left-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-r-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-left text-xl"></i>
+                        </button>
+                        <div id="trending-row"
+                            class="flex items-center gap-3 sm:gap-4 overflow-x-auto hide-scrollbar scroll-smooth py-4">
+                            <!-- Injected via JS -->
+                        </div>
+                        <button onclick="scrollRow('trending-row', 1)"
+                            class="absolute right-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-l-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-right text-xl"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Category 2: Sci-Fi Blockbusters -->
+                <section class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold tracking-wide text-zinc-100 flex items-center gap-2">
+                            <span>Sci-Fi & Cyberpunk</span>
+                            <i
+                                class="fa-solid fa-chevron-right text-xs text-zinc-500 hover:text-white transition cursor-pointer"></i>
+                        </h2>
+                    </div>
+                    <div class="relative group">
+                        <button onclick="scrollRow('scifi-row', -1)"
+                            class="absolute left-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-r-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-left text-xl"></i>
+                        </button>
+                        <div id="scifi-row"
+                            class="flex items-center gap-3 sm:gap-4 overflow-x-auto hide-scrollbar scroll-smooth py-4">
+                            <!-- Injected via JS -->
+                        </div>
+                        <button onclick="scrollRow('scifi-row', 1)"
+                            class="absolute right-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-l-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-right text-xl"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Category 3: High Voltage Action -->
+                <section class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold tracking-wide text-zinc-100 flex items-center gap-2">
+                            <span>Action & Thrillers</span>
+                            <i
+                                class="fa-solid fa-chevron-right text-xs text-zinc-500 hover:text-white transition cursor-pointer"></i>
+                        </h2>
+                    </div>
+                    <div class="relative group">
+                        <button onclick="scrollRow('action-row', -1)"
+                            class="absolute left-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-r-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-left text-xl"></i>
+                        </button>
+                        <div id="action-row"
+                            class="flex items-center gap-3 sm:gap-4 overflow-x-auto hide-scrollbar scroll-smooth py-4">
+                            <!-- Injected via JS -->
+                        </div>
+                        <button onclick="scrollRow('action-row', 1)"
+                            class="absolute right-0 top-0 bottom-0 z-30 bg-black/60 hover:bg-black/80 text-white px-2 sm:px-4 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-l-md backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-right text-xl"></i>
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer -->
+            <footer
+                class="mt-auto border-t border-zinc-900 bg-[#0f0f0f] px-6 sm:px-12 py-10 text-zinc-500 text-xs sm:text-sm">
+                <div class="max-w-6xl mx-auto space-y-6">
+                    <div class="flex space-x-6 text-xl text-zinc-400">
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <a href="#" class="hover:underline">Audio Description</a>
+                        <a href="#" class="hover:underline">Help Center</a>
+                        <a href="#" class="hover:underline">Gift Cards</a>
+                        <a href="#" class="hover:underline">Media Center</a>
+                        <a href="#" class="hover:underline">Investor Relations</a>
+                        <a href="#" class="hover:underline">Jobs</a>
+                        <a href="#" class="hover:underline">Terms of Use</a>
+                        <a href="#" class="hover:underline">Privacy Policy</a>
+                    </div>
+                    <p class="text-zinc-600">© 2026 StreamFlix Inc. All rights reserved.</p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- TAB 2: HTML CODE VIEWER -->
+        <div id="view-html" class="tab-view hidden flex-grow bg-[#0d1117] text-zinc-300 p-4 sm:p-6 overflow-auto">
+            <div class="max-w-5xl mx-auto space-y-4">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                    <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                        <i class="fa-brands fa-html5 text-orange-500"></i> index.html
+                    </h3>
+                    <button onclick="copyCode('code-html')"
+                        class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-xs rounded text-zinc-200 transition flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                <pre><code id="code-html" class="code-font text-xs sm:text-sm text-amber-200/90 leading-relaxed">
+
+        <!-- TAB 3: CSS CODE VIEWER -->
+        <div id="view-css" class="tab-view hidden flex-grow bg-[#0d1117] text-zinc-300 p-4 sm:p-6 overflow-auto">
+            <div class="max-w-5xl mx-auto space-y-4">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                    <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                        <i class="fa-brands fa-css3-alt text-blue-500"></i> styles.css
+                    </h3>
+                    <button onclick="copyCode('code-css')"
+                        class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-xs rounded text-zinc-200 transition flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                <pre><code id="code-css" class="code-font text-xs sm:text-sm text-sky-200/90 leading-relaxed">
+
+/* Custom Netflix Hero Gradient */
+.hero-gradient {
+    background: linear-gradient(
+        180deg, 
+        rgba(20,20,20,0.2) 0%, 
+        rgba(20,20,20,0.8) 70%, 
+        rgba(20,20,20,1) 100%
+    );
+}
+
+.card-hover-effect:hover {
+    transform: scale(1.08) translateY(-6px);
+    z-index: 30;
+    box-shadow: 0 10px 25px -5px rgba(229, 9, 20, 0.4);
+}
+
+        <!-- TAB 4: JS CODE VIEWER -->
+        <div id="view-js" class="tab-view hidden flex-grow bg-[#0d1117] text-zinc-300 p-4 sm:p-6 overflow-auto">
+            <div class="max-w-5xl mx-auto space-y-4">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                    <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                        <i class="fa-brands fa-js text-yellow-400"></i> script.js
+                    </h3>
+                    <button onclick="copyCode('code-js')"
+                        class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-xs rounded text-zinc-200 transition flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                <pre><code id="code-js" class="code-font text-xs sm:text-sm text-emerald-200/90 leading-relaxed">
+    <div id="video-modal"
+        class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div
+            class="bg-[#181818] w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl border border-zinc-800 animate-fade-in relative">
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition border border-zinc-700">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="relative pt-[56.25%] bg-black">
+                <iframe id="modal-iframe" class="absolute inset-0 w-full h-full" src="" title="Video Preview"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 id="modal-title" class="text-2xl font-bold text-white">Movie Title</h3>
+                        <p id="modal-[#meta]" class="text-xs text-zinc-400 mt-1 flex items-center gap-3">
+                            <span class="text-green-400 font-semibold">98% Match</span>
+                            <span class="border border-zinc-700 px-1.5 py-0.5 rounded">HD</span>
+                            <span>2026</span>
+                            <span>2h 15m</span>
+                        </p>
+                    </div>
+                    <button
+                        class="bg-[#e50914] hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-lg flex items-center gap-2 transition">
+                        <i class="fa-solid fa-play"></i> Watch Now
+                    </button>
+                </div>
+                <p id="modal-description" class="text-zinc-300 text-sm leading-relaxed">
+                    Movie overview dynamic text description goes here...
+                </p>
+            </div>
+        </div>
+    </div>
